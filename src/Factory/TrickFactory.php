@@ -34,12 +34,13 @@ final class TrickFactory extends ModelFactory
         parent::__construct();
     }
 
-    #[ArrayShape(['title' => "string", 'slug' => "string", 'state' => "string", 'createdAt' => "\DateTime", 'updatedAt' => "\DateTime"])]
+    #[ArrayShape(['title' => "string", 'slug' => "string", 'state' => "string", 'description' => "string", 'createdAt' => "\DateTime", 'updatedAt' => "\DateTime"])]
     protected function getDefaults(): array
     {
         return [
             'title' => self::faker()->text(50),
             'state' => self::faker()->text(),
+            'description' => self::faker()->paragraph(4),
             'createdAt' => self::faker()->datetime(),
             'updatedAt' => self::faker()->dateTime()
         ];
