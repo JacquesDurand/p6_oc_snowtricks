@@ -17,7 +17,7 @@ class IndexController extends AbstractController
         $qb = $trickRepository->createFindAllOrderedByCreatedDateQueryBuilder();
 
         $pager = new Pagerfanta(new QueryAdapter($qb));
-        $pager->setMaxPerPage(2);
+        $pager->setMaxPerPage(4);
         $pager->setCurrentPage($page);
 
         return $this->render('index/index.html.twig', [

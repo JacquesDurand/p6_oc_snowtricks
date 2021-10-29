@@ -24,6 +24,5 @@ class TrickRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('t')
             ->orderBy('t.createdAt');
-
     }
 }

@@ -4,6 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Picture;
 use App\Repository\PictureRepository;
+use JetBrains\PhpStorm\ArrayShape;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
@@ -31,17 +32,16 @@ final class PictureFactory extends ModelFactory
     public function __construct()
     {
         parent::__construct();
-
-        // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
     }
 
+    #[ArrayShape(['path' => "string", 'alt' => "string", 'createdAt' => "\DateTime", 'updatedAt' => "\DateTime"])]
     protected function getDefaults(): array
     {
         return [
-            // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
-            'path' => self::faker()->text(),
+            'path' => str_replace(__DIR__.'/../../public/', '', self::faker()->image(__DIR__.'/../../public/fixtures/pictures', 360, 360, 'animals', true, true, 'cats', true)),
+            'alt' => self::faker()->text(32),
             'createdAt' => self::faker()->datetime(),
-            'updatedAt' => null, // TODO add DATETIME ORM type manually
+            'updatedAt' => self::faker()->dateTime()
         ];
     }
 
