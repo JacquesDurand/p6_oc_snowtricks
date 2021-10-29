@@ -22,7 +22,7 @@ RUN set -eux \
 COPY . /var/www/snow
 WORKDIR /var/www/snow
 
-COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN composer install --no-interaction
 
 CMD ["php-fpm"]
