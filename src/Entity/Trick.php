@@ -16,7 +16,7 @@ class Trick
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $title;
 
     #[ORM\Column(type: 'text', nullable: true)]

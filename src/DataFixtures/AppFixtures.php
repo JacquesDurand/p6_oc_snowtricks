@@ -14,6 +14,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         CategoryFactory::new()->createMany(5);
+        UserFactory::new()->create(['email' => 'admin@snowtricks.com']);
         UserFactory::new()->createMany(10);
 
         TrickFactory::new()->createMany(10, function () {
