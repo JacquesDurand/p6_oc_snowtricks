@@ -5,6 +5,8 @@ namespace App\Factory;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use JetBrains\PhpStorm\ArrayShape;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
@@ -29,18 +31,21 @@ use Zenstruck\Foundry\Proxy;
  */
 final class UserFactory extends ModelFactory
 {
-    public function __construct()
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         parent::__construct();
+        $this->passwordHasher = $passwordHasher;
     }
 
-    #[ArrayShape(['email' => "string", 'roles' => "array", 'password' => "string", 'username' => "string", 'createdAt' => "\DateTime", 'updatedAt' => "\DateTime"])]
+    #[ArrayShape(['email' => "string", 'roles' => "array", 'plainPassword' => "string", 'username' => "string", 'createdAt' => "\DateTime", 'updatedAt' => "\DateTime"])]
     protected function getDefaults(): array
     {
         return [
             'email' => self::faker()->email(),
             'roles' => [],
-            'password' => self::faker()->password(8),
+            'plainPassword' => 'toto',
             'username' => self::faker()->name(),
             'createdAt' => self::faker()->datetime(),
             'updatedAt' => self::faker()->dateTime()
@@ -51,7 +56,11 @@ final class UserFactory extends ModelFactory
     {
         // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this
-            // ->afterInstantiate(function(User $user) {})
+             ->afterInstantiate(function(User $user) {
+                 if ($user->getPlainPassword()) {
+                     $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPlainPassword()));
+                 }
+             })
         ;
     }
 

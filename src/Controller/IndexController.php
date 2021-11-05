@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    #[Route('/{page<\d+>}', name: 'index')]
+    #[Route('/{page<\d+>}', name: 'app_index')]
     public function index(TrickRepository $trickRepository, int $page = 1): Response
     {
         $qb = $trickRepository->createFindAllOrderedByCreatedDateQueryBuilder();

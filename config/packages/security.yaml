@@ -20,7 +20,11 @@ security:
             security: false
         main:
             lazy: true
+            form_login: ~
             provider: app_user_provider
+            custom_authenticator: App\Security\LoginFormAuthenticator
+            logout: true
+            entry_point: form_login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
