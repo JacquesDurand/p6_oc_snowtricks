@@ -28,7 +28,7 @@ class PictureType extends AbstractType
                             'image/png',
                         ],
                         'mimeTypesMessage' => 'Only JPG or PNG',
-                        'maxSize' => "1024K",
+                        'maxSize' => "4096K",
                     ])
                 ]
             ])

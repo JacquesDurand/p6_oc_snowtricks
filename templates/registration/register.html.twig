@@ -24,8 +24,10 @@
                         label: 'Password'
                     }) }}
                 </div>
+                <div class="col-12">
+                    {{ form_row(registrationForm.file) }}
+                </div>
 
-{#                {{ form_row(registrationForm.agreeTerms) }}#}
                 <div class="col-12">
                     <button type="submit" class="btn btn-lg btn-primary float-end">Register</button>
                 </div>
