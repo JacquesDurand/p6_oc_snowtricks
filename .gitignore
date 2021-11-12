@@ -142,3 +142,6 @@ yarn-error.log
 ## fixtures images
 
 /public/fixtures
+
+## Images ( to remove at the end)
+/public/uploads

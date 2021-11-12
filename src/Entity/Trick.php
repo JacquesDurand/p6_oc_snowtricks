@@ -7,53 +7,62 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JetBrains\PhpStorm\Pure;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Trick
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private $title;
+    #[Assert\NotBlank]
+    private ?string $title;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $description;
+    #[Assert\NotBlank]
+    private ?string $description;
 
     #[ORM\Column(type: 'string', length: 255)]
     /**
      * @Gedmo\Slug(fields={"title"})
      */
-    private $slug;
+    private ?string $slug;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $state;
+    private ?string $state;
 
     #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
 
     #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
-    private $author;
+    #[Assert\NotNull]
+    private ?User $author;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'tricks')]
-    private $categories;
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'tricks', cascade: ['persist'])]
+    #[Assert\NotBlank]
+    private ArrayCollection $categories;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
-    private $comments;
+    private ArrayCollection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class)]
-    private $pictures;
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist'])]
+    #[Assert\NotBlank]
+    private ArrayCollection $pictures;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, orphanRemoval: true)]
-    private $videos;
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'], orphanRemoval: true)]
+    #[Assert\NotBlank]
+    private ArrayCollection $videos;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->comments = new ArrayCollection();
@@ -262,5 +271,15 @@ class Trick
         }
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateTimeStamps()
+    {
+        $this->setUpdatedAt(new \DateTime());
+        if (null === $this->getCreatedAt()) {
+            $this->setCreatedAt(new \DateTime());
+        }
     }
 }
