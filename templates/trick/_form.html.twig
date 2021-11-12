@@ -1,0 +1,57 @@
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% macro printPictureRow(pictureForm) %}
+    <div class="col-xs-4 js-picture-item">
+        <a href="#" class="js-remove-picture pull-right">
+            <span class="fa fa-close"></span>
+        </a>
+        {{ form_errors(pictureForm) }}
+        <div class="col-sm-9">
+            {{ form_row(pictureForm.file) }}
+        </div>
+        <div class="col-sm-3">
+            {{ pictureForm.vars.data.file }}
+{#            {% if pictureForm.vars.data.file|default %}#}
+{#                <img src="" alt="">#}
+{#            {% endif %}#}
+        </div>
+    </div>
+{% endmacro %}
+
+{% import _self as formMacros %}
+
+<div class="row">
+    <div class="login-form bg-light mt-4 p-4">
+
+        {{ form_start(form, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'} }) }}
+        <div class="col-12">
+            {{ form_row(form.title) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.description) }}
+        </div>
+        <div class="col-12">
+            {{ form_label(form.categories) }}
+            {% for category in form.categories %}
+            <div class="form-check">
+            {{ form_widget(category, { 'attr': {'class' : 'form-check-input'}}) }}
+                {{ form_label(category) }}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row js-picture-wrapper"
+             data-prototype="{{ formMacros.printPictureRow(form.pictures.vars.prototype)|e }}"
+             data-index="{{ form.pictures|length }}"
+        >
+            <a href="#" class="js-picture-add">
+                <span class="fa fa-plus-circle"></span>
+                Add A Picture
+            </a>
+            <div class="col-12">
+                <button type="submit"
+                        class="btn btn-lg btn-primary float-end">{{ button_label|default('Save') }}</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

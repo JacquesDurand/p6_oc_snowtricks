@@ -6,6 +6,7 @@ use App\Repository\PictureRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Picture
 {
     #[ORM\Id]
@@ -27,6 +28,8 @@ class Picture
 
     #[ORM\Column(type: 'text', nullable: true)]
     private $alt;
+
+    private $file;
 
     public function getId(): ?int
     {
@@ -91,5 +94,32 @@ class Picture
         $this->alt = $alt;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file): void
+    {
+        $this->file = $file;
+    }
+
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateTimeStamps()
+    {
+        $this->setUpdatedAt(new \DateTime());
+        if (null === $this->getCreatedAt()) {
+            $this->setCreatedAt(new \DateTime());
+        }
     }
 }

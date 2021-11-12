@@ -10,6 +10,7 @@
                     {% if trick.pictures is not empty %}
                         <div id="{{ 'carouselExampleIndicators'~trick.id }}" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
+                                {{ trick.pictures|length }}
                                 {% for picture in trick.pictures %}
                                     {% if picture == trick.pictures.first %}
                                     <div class="carousel-item active">
@@ -38,7 +39,11 @@
                         </div>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ trick.title }}</h5>
+                        <h5 class="card-title">
+                            <a href="{{ path('trick_show', {'slug': trick.slug} ) }}">
+                                {{ trick.title }}
+                            </a>
+                        </h5>
                         <p class="fst-italic">{{ trick.author.username }}</p>
                         <hr>
                         <p class="card-text">{{ trick.description }}</p>
