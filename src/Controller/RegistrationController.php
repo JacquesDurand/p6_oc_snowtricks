@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use App\Service\File\FileUploader;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,19 +25,24 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, FileUploader $fileUploader): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $picture = $form->get('file')->getData();
+            $filename = $fileUploader->upload($picture, FileUploader::USER_PICTURE_DIRECTORY);
+            $user->setFile($picture);
+            $user->setProfilePicturePath($filename);
+
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasherInterface->hashPassword(
-                $user,
-                $form->get('plainPassword')->getData()
-            )
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
             );
 
             $entityManager = $this->getDoctrine()->getManager();

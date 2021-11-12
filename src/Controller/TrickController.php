@@ -43,7 +43,7 @@ class TrickController extends AbstractController
 
             /** @var Picture $picture */
             foreach ($pictures as $picture) {
-                $fileName = $fileUploader->upload($picture->getFile());
+                $fileName = $fileUploader->upload($picture->getFile(), FileUploader::TRICK_PICTURE_DIRECTORY);
                 $picture->setPath($fileName);
                 $trick->addPicture($picture);
             }

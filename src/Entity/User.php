@@ -47,6 +47,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
     private $comments;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $profilePicturePath;
+
+    private $file;
+
     /**
      * @var string|null
      */
@@ -276,5 +281,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (null === $this->getCreatedAt()) {
             $this->setCreatedAt(new \DateTime());
         }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getProfilePicturePath(): ?string
+    {
+        return $this->profilePicturePath;
+    }
+
+    /**
+     * @param string|null $profilePicturePath
+     */
+    public function setProfilePicturePath(?string $profilePicturePath): void
+    {
+        $this->profilePicturePath = $profilePicturePath;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file): void
+    {
+        $this->file = $file;
     }
 }
