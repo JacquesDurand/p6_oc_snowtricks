@@ -31,8 +31,9 @@ class TrickType extends AbstractType
                 'label' => 'Description',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Description'
-                ],
+                    'placeholder' => 'Description',
+                    'rows' => 10,
+                    'style' => 'height: 100%'                ],
                 'row_attr' => [
                     'class' => 'form-floating'
                 ],

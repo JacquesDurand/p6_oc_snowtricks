@@ -9,12 +9,12 @@
         <div class="col-sm-9">
             {{ form_row(pictureForm.file) }}
         </div>
-        <div class="col-sm-3">
-            {{ pictureForm.vars.data.file }}
+{#        <div class="col-sm-3">#}
+{#            {{ pictureForm.vars.data.file }}#}
 {#            {% if pictureForm.vars.data.file|default %}#}
 {#                <img src="" alt="">#}
 {#            {% endif %}#}
-        </div>
+{#        </div>#}
     </div>
 {% endmacro %}
 
@@ -40,8 +40,8 @@
             {% endfor %}
         </div>
         <div class="row js-picture-wrapper"
-             data-prototype="{{ formMacros.printPictureRow(form.pictures.vars.prototype)|e }}"
-             data-index="{{ form.pictures|length }}"
+             data-prototype-picture="{{ formMacros.printPictureRow(form.pictures.vars.prototype)|e }}"
+             data-index-picture="{{ form.pictures|length }}"
         >
             <a href="#" class="js-picture-add">
                 <span class="fa fa-plus-circle"></span>
@@ -51,7 +51,7 @@
                 <button type="submit"
                         class="btn btn-lg btn-primary float-end">{{ button_label|default('Save') }}</button>
             </div>
-            {{ form_end(form) }}
         </div>
+        {{ form_end(form) }}
     </div>
 </div>

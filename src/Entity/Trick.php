@@ -49,18 +49,18 @@ class Trick
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'tricks', cascade: ['persist'])]
     #[Assert\NotBlank]
-    private ArrayCollection $categories;
+    private $categories;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
-    private ArrayCollection $comments;
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, cascade: ['persist'], orphanRemoval: true)]
+    private $comments;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist'])]
     #[Assert\NotBlank]
-    private ArrayCollection $pictures;
+    private $pictures;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'], orphanRemoval: true)]
     #[Assert\NotBlank]
-    private ArrayCollection $videos;
+    private $videos;
 
     #[Pure] public function __construct()
     {

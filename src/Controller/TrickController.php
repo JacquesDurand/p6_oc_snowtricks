@@ -2,17 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Entity\Trick;
+use App\Form\CommentType;
+use App\Form\TrickCommentType;
 use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Service\File\FileUploader;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 #[Route('/trick')]
 class TrickController extends AbstractController
@@ -61,15 +67,46 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'trick_show', methods: ['GET'])]
-    public function show(Trick $trick): Response
+    #[Route('/{slug}/{page<\d+>}', name: 'trick_show', methods: ['GET', 'POST'])]
+    public function show(Trick $trick, Security $security, Request $request, CommentRepository $commentRepository, int $page = 1): Response
     {
+        $qb = $commentRepository->createFindAllForTrickOrderedByCreatedAtQueryBuilder($trick);
+
+        $pager = new Pagerfanta(new QueryAdapter($qb));
+        $pager->setMaxPerPage(10);
+        $pager->setCurrentPage($page);
+
+        $form = $this->createForm(TrickCommentType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var Comment $comment */
+            foreach ($form->get('comments')->getData() as $comment) {
+                $comment->setAuthor($security->getUser());
+                $trick->addComment($comment);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('trick_show', [
+                'slug' => $trick->getSlug()
+            ]);
+        }
+
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'commentForm' => $form->createView(),
+            'pager' => $pager
         ]);
     }
 
     #[Route('/{slug}/edit', name: 'trick_edit', methods: ['GET','POST'])]
+    #[IsGranted("IS_AUTHENTICATED_FULLY")]
     public function edit(Request $request, Trick $trick): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
