@@ -1,4 +1,19 @@
 {% extends 'base.html.twig' %}
+{% form_theme commentForm 'bootstrap_5_layout.html.twig' %}
+
+{% macro printCommentRow(commentForm) %}
+    <div class="col-xs-4 js-comment-item">
+        <a href="#" class="js-remove-comment pull-right">
+            <span class="fa fa-close"></span>
+        </a>
+        {{ form_errors(commentForm) }}
+        <div class="col-sm-9">
+            {{ form_row(commentForm.content) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% import _self as formMacros %}
 
 {% block title %}Trick{% endblock %}
 
@@ -7,40 +22,72 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ trick.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ trick.title }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ trick.description }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ trick.slug }}</td>
-            </tr>
-            <tr>
-                <th>State</th>
-                <td>{{ trick.state }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ trick.updatedAt ? trick.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ trick.id }}</td>
+        </tr>
+        <tr>
+            <th>Title</th>
+            <td>{{ trick.title }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ trick.description }}</td>
+        </tr>
+        <tr>
+            <th>Slug</th>
+            <td>{{ trick.slug }}</td>
+        </tr>
+        <tr>
+            <th>State</th>
+            <td>{{ trick.state }}</td>
+        </tr>
+        <tr>
+            <th>CreatedAt</th>
+            <td>{{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>UpdatedAt</th>
+            <td>{{ trick.updatedAt ? trick.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('trick_index') }}">back to list</a>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {{ form_start(commentForm) }}
+        <div class="row js-comment-wrapper"
+             data-prototype-comment="{{ formMacros.printCommentRow(commentForm.comments.vars.prototype)|e }}"
+             data-index-comment="{{ commentForm.comments|length }}"
+        >
+            <a href="#" class="js-comment-add" title="Ajouter un commentaire">
+                <span class="fa fa-plus-circle"></span>
+                Add A Comment
+            </a>
+            <div class="col-12">
+                <button type="submit"
+                        class="btn btn-lg btn-primary float-end">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+        {{ form_end(commentForm) }}
 
-    <a href="{{ path('trick_edit', {'slug': trick.slug}) }}">edit</a>
+        <a href="{{ path('trick_edit', {'slug': trick.slug}) }}">edit</a>
+
+    {% endif %}
+
+    {% for comment in pager %}
+        <div class="card-body">
+            <h5 class="card-title">
+                {{ comment.author.username }}
+            </h5>
+            <p class="fst-italic">{{ comment.createdAt|date('Y-m-d H:i:s') }}</p>
+            <hr>
+            <p class="card-text">{{ comment.content }}</p>
+        </div>
+    {% endfor %}
+    {{ pagerfanta(pager) }}
+
+    <a href="{{ path('app_index') }}">back to list</a>
+
 
     {{ include('trick/_delete_form.html.twig') }}
 {% endblock %}
