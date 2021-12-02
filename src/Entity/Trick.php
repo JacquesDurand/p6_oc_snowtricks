@@ -62,6 +62,9 @@ class Trick
     #[Assert\NotBlank]
     private $videos;
 
+    public const TRICK_STATE_IN_REVISION = 'in revision';
+    public const TRICK_STATE_AVAILABLE = 'available';
+
     #[Pure] public function __construct()
     {
         $this->categories = new ArrayCollection();

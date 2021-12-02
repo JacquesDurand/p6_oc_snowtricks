@@ -51,8 +51,7 @@ class TrickController extends AbstractController
             $user = $security->getUser();
             $trick->setAuthor($user);
 
-            //TODO obv
-            $trick->setState('toto');
+            $trick->setState(Trick::TRICK_STATE_AVAILABLE);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($trick);
