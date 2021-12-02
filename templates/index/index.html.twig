@@ -3,6 +3,22 @@
 {% block title %}Hello IndexController!{% endblock %}
 
 {% block body %}
+    <div class="w-100 h-100">
+        <div class="col-lg-12 bg-image text-top-end text-orange shadow-lg p-3 mb-5 mt-2" style="background-image: url({{ asset('main.jpg') }})">
+            <div class="col-12 pb-5">
+                <h1 class="col-12">
+                    SnowTricks
+                </h1>
+                <h4 class="col-12">
+                    The place to trick
+                </h4>
+                <p class="fst-italic">
+                    by Jimmy Sweat
+                </p>
+            </div>
+        </div>
+    </div>
+
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for trick in pager %}
             <div class="col">
@@ -39,10 +55,15 @@
                         </div>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">
+                        <h5 class="card-title d-flex flex-wrap justify-content-between ">
                             <a href="{{ path('trick_show', {'slug': trick.slug} ) }}">
                                 {{ trick.title }}
                             </a>
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') and trick.state != constant('App\\Entity\\Trick::TRICK_STATE_IN_REVISION') %}
+                                <a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="text-end">
+                                    <span class="fa fa-pencil"></span>
+                                </a>
+                            {% endif %}
                         </h5>
                         <p class="fst-italic">{{ trick.author.username }}</p>
                         <hr>
