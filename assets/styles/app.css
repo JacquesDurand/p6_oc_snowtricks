@@ -2,10 +2,9 @@
 @import "~font-awesome";
 
 .bg-image {
-    object-fit: cover;
-    background-size: 100% 100%;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position:center center;
+    background-position:50% 0%;
     height: 450px;
     width: 100%;
     display: flex;
@@ -24,6 +23,13 @@
 
 .text-top-end {
     text-align: right;
-    padding-bottom: 15rem !important;
     text-shadow: 2px 2px 5px antiquewhite;
+}
+
+.object-fit {
+    object-fit: cover;
+}
+
+.fixed-size-card-image {
+    height: 250px;
 }
