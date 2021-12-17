@@ -54,25 +54,28 @@
                             </button>
                         </div>
                     {% endif %}
-                    <div class="card-body">
+                    <div class="card-body bg-dark">
                         <h5 class="card-title d-flex flex-wrap justify-content-between ">
-                            <a href="{{ path('trick_show', {'slug': trick.slug} ) }}">
+                            <a class="text-orange text-decoration-none" href="{{ path('trick_show', {'slug': trick.slug} ) }}">
                                 {{ trick.title }}
                             </a>
                             {% if is_granted('IS_AUTHENTICATED_FULLY') and trick.state != constant('App\\Entity\\Trick::TRICK_STATE_IN_REVISION') %}
-                                <a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="text-end">
-                                    <span class="fa fa-pencil"></span>
+                                <a href="{{ path('trick_show', {'slug': trick.slug}) }}" class="text-end">
+                                    <span class="fa fa-pencil text-orange"></span>
                                 </a>
                             {% endif %}
                         </h5>
-                        <p class="fst-italic">{{ trick.author.username }}</p>
-                        <hr>
-                        <p class="card-text">{{ trick.description }}</p>
+                        <p class="fst-italic text-orange">{{ trick.author.username }}</p>
+                        <hr class="text-white">
+                        <p class="card-text text-orange">{{ trick.description }}</p>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
-
+    <br>
+<div class="text-orange">
     {{ pagerfanta(pager) }}
+</div>
+
 {% endblock %}
