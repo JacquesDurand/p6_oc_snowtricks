@@ -16,6 +16,21 @@
     border-radius: calc(0.25rem - 1px);
 }
 
+.bg-image-card {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position:50% 0%;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    border-radius: calc(0.25rem - 1px);
+}
+
 .text-orange {
     color: #ff8000;
 
@@ -32,4 +47,16 @@
 
 .fixed-size-card-image {
     height: 250px;
+}
+
+.border-orange {
+    border: 1px #ff8000 solid;
+}
+
+.btn-orange {
+    background-color: #ff8000;
+}
+
+.card-rounded {
+    border-radius: 5px;
 }

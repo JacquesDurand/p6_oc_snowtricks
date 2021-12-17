@@ -2,7 +2,7 @@
 
 {% macro printPictureRow(pictureForm) %}
     <div class="col-xs-4 js-picture-item">
-        <a href="#" class="js-remove-picture pull-right">
+        <a href="#" class="js-remove-picture pull-right text-orange">
             <span class="fa fa-close"></span>
         </a>
         {{ form_errors(pictureForm) }}
@@ -20,10 +20,11 @@
 
 {% import _self as formMacros %}
 
-<div class="row">
-    <div class="login-form bg-light mt-4 p-4">
+<div class="row mb-2">
+    <div class="login-form bg-dark text-orange mt-4 p-4">
 
         {{ form_start(form, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'} }) }}
+        <input type="hidden" name="token" value="{{ csrf_token('trick_edit') }}"/>
         <div class="col-12">
             {{ form_row(form.title) }}
         </div>
@@ -43,13 +44,13 @@
              data-prototype-picture="{{ formMacros.printPictureRow(form.pictures.vars.prototype)|e }}"
              data-index-picture="{{ form.pictures|length }}"
         >
-            <a href="#" class="js-picture-add">
+            <a href="#" class="js-picture-add text-decoration-none text-orange">
                 <span class="fa fa-plus-circle"></span>
                 Add A Picture
             </a>
             <div class="col-12">
                 <button type="submit"
-                        class="btn btn-lg btn-primary float-end">{{ button_label|default('Save') }}</button>
+                        class="text-orange btn btn-lg btn-outline-light float-end">{{ button_label|default('Save') }}</button>
             </div>
         </div>
         {{ form_end(form) }}

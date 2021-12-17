@@ -31,7 +31,7 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
             ->add('file', FileType::class, [
-                'label' => 'File',
+                'label' => 'Add a profile picture !',
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Select an image'
