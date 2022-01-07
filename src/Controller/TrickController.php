@@ -28,6 +28,7 @@ use Symfony\Component\Security\Core\Security;
 class TrickController extends AbstractController
 {
     #[Route('/new', name: 'trick_new', methods: ['GET','POST'])]
+    #[IsGranted("IS_AUTHENTICATED_FULLY")]
     public function new(Request $request, Security $security, FileUploader $fileUploader): Response
     {
         $trick = new Trick();
@@ -58,7 +59,7 @@ class TrickController extends AbstractController
 
         return $this->renderForm('trick/new.html.twig', [
             'trick' => $trick,
-            'form' => $form,
+            'trickForm' => $form,
         ]);
     }
 
@@ -185,13 +186,14 @@ class TrickController extends AbstractController
         $trick = $repository->findOneBy(['slug' => $request->get('slug')]);
         $picture = $pictureRepository->find($request->get('id'));
         if ($this->isCsrfTokenValid('update'.$trick->getId().'picture'.$picture->getId(), $request->request->get('_token'))) {
-
             foreach ($request->files as $file) {
-                $newPic = new Picture();
-                $newPic->setFile($file);
-                $fileName = $fileUploader->upload($newPic->getFile(), FileUploader::TRICK_PICTURE_DIRECTORY);
-                $newPic->setPath($fileName);
-                $trick->addPicture($newPic);
+                if (null !== $file) {
+                    $newPic = new Picture();
+                    $newPic->setFile($file);
+                    $fileName = $fileUploader->upload($newPic->getFile(), FileUploader::TRICK_PICTURE_DIRECTORY);
+                    $newPic->setPath($fileName);
+                    $trick->addPicture($newPic);
+                }
             }
             $trick->removePicture($picture);
             $entityManager = $this->getDoctrine()->getManager();
@@ -199,6 +201,5 @@ class TrickController extends AbstractController
             $entityManager->flush();
         }
         return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
-
     }
 }

@@ -17,8 +17,9 @@ class PictureType extends AbstractType
             ->add('file', FileType::class, [
                 'label' => 'File',
                 'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Select an image'
+                    'class' => 'form-control newFileInput',
+                    'placeholder' => 'Select an image',
+                    'accept' => 'image/*'
                 ],
                 'constraints' => [
                     new File([
