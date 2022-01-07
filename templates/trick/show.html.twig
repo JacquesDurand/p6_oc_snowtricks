@@ -27,7 +27,6 @@
         {% if trick.pictures is not empty %}
             <div class="text-top-end">
                 <img class="card-img-top" src="/{{ trick.pictures.first.path }}" alt="{{ trick.pictures.first.alt }}">
-                <div class="col-12 pb-5 h-100">
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <form enctype="multipart/form-data" id="editMainPictureForm" method="post" action="{{ path('trick_update_picture', {'slug': trick.slug, 'id': trick.pictures.first.id}) }}">
                             <input form="editMainPictureForm" type="hidden" name="_token" value="{{ csrf_token('update'~trick.id~'picture'~trick.pictures.first.id) }}"/>

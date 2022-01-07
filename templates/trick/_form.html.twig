@@ -1,4 +1,4 @@
-{% form_theme form 'bootstrap_5_layout.html.twig' %}
+{% form_theme trickForm 'bootstrap_5_layout.html.twig' %}
 
 {% macro printPictureRow(pictureForm) %}
     <div class="col-xs-4 js-picture-item">
@@ -9,6 +9,7 @@
         <div class="col-sm-9">
             {{ form_row(pictureForm.file) }}
         </div>
+        <div class="img-preview"></div>
 {#        <div class="col-sm-3">#}
 {#            {{ pictureForm.vars.data.file }}#}
 {#            {% if pictureForm.vars.data.file|default %}#}
@@ -23,17 +24,17 @@
 <div class="row mb-2">
     <div class="login-form bg-dark text-orange mt-4 p-4">
 
-        {{ form_start(form, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'} }) }}
+        {{ form_start(trickForm, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'} }) }}
         <input type="hidden" name="token" value="{{ csrf_token('trick_edit') }}"/>
         <div class="col-12">
-            {{ form_row(form.title) }}
+            {{ form_row(trickForm.title) }}
         </div>
         <div class="col-12">
-            {{ form_row(form.description) }}
+            {{ form_row(trickForm.description) }}
         </div>
         <div class="col-12">
-            {{ form_label(form.categories) }}
-            {% for category in form.categories %}
+            {{ form_label(trickForm.categories) }}
+            {% for category in trickForm.categories %}
             <div class="form-check">
             {{ form_widget(category, { 'attr': {'class' : 'form-check-input'}}) }}
                 {{ form_label(category) }}
@@ -41,8 +42,8 @@
             {% endfor %}
         </div>
         <div class="row js-picture-wrapper"
-             data-prototype-picture="{{ formMacros.printPictureRow(form.pictures.vars.prototype)|e }}"
-             data-index-picture="{{ form.pictures|length }}"
+             data-prototype-picture="{{ formMacros.printPictureRow(trickForm.pictures.vars.prototype)|e }}"
+             data-index-picture="{{ trickForm.pictures|length }}"
         >
             <a href="#" class="js-picture-add text-decoration-none text-orange">
                 <span class="fa fa-plus-circle"></span>
@@ -53,6 +54,6 @@
                         class="text-orange btn btn-lg btn-outline-light float-end">{{ button_label|default('Save') }}</button>
             </div>
         </div>
-        {{ form_end(form) }}
+        {{ form_end(trickForm) }}
     </div>
 </div>

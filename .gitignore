@@ -145,3 +145,6 @@ yarn-error.log
 
 ## Images ( to remove at the end)
 /public/uploads
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

@@ -60,3 +60,53 @@
 .card-rounded {
     border-radius: 5px;
 }
+
+.mt-neg {
+    position: absolute;
+    width: 100%;
+    top: 0;
+}
+
+.img-preview {
+    display: none;
+    width: 155px;
+    border: 2px dashed #333;
+    margin-bottom: 20px;
+}
+.img-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+[type="file"] {
+    overflow: hidden;
+}
+[type="file"] + label {
+    font-family: sans-serif;
+    background: #f44336;
+    padding: 10px 30px;
+    border: 2px solid #f44336;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+[type="file"] + label:hover {
+    background-color: #fff;
+    color: #f44336;
+}
+
+.pagination li *{
+    color: #ff8000 !important;
+    border-color: #f8f9fa !important;
+    background-color: #333333 !important;
+}
+
+.pagination li a:hover{
+    background-color: #f8f9fa !important;
+}
+
+.pagination li span {
+    opacity: 50%;
+}
