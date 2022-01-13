@@ -19,11 +19,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class FixturesLoadProdVideosCommand extends AbstractFixtureCommand
 {
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        parent::__construct($entityManager);
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

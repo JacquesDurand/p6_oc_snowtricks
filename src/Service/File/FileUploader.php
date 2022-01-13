@@ -49,11 +49,10 @@ class FileUploader
 
     public function getTargetDirectory(string $pictureType): string
     {
-        switch ($pictureType) {
-            case self::TRICK_PICTURE_DIRECTORY:
-                return $this->trickPictureDirectory;
-            case self::USER_PICTURE_DIRECTORY:
-                return $this->userPictureDirectory;
+        if (self::USER_PICTURE_DIRECTORY === $pictureType) {
+            return $this->userPictureDirectory;
         }
+
+        return $this->trickPictureDirectory;
     }
 }
