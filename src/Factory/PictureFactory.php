@@ -29,11 +29,6 @@ use Zenstruck\Foundry\Proxy;
  */
 final class PictureFactory extends ModelFactory
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     #[ArrayShape(['path' => "string", 'alt' => "string", 'createdAt' => "\DateTime", 'updatedAt' => "\DateTime"])]
     protected function getDefaults(): array
     {
@@ -47,7 +42,6 @@ final class PictureFactory extends ModelFactory
 
     protected function initialize(): self
     {
-        // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this
             // ->afterInstantiate(function(Picture $picture) {})
         ;

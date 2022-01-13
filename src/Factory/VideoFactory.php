@@ -28,26 +28,17 @@ use Zenstruck\Foundry\Proxy;
  */
 final class VideoFactory extends ModelFactory
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
-    }
-
     protected function getDefaults(): array
     {
         return [
-            // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
             'link' => self::faker()->text(),
             'createdAt' => self::faker()->datetime(),
-            'updatedAt' => null, // TODO add DATETIME ORM type manually
+            'updatedAt' => null,
         ];
     }
 
     protected function initialize(): self
     {
-        // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this
             // ->afterInstantiate(function(Video $video) {})
         ;

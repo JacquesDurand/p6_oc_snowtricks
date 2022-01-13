@@ -19,11 +19,6 @@ class FixturesLoadProdPicturesCommand extends AbstractFixtureCommand
 {
     private const TRICK_PICTURE_DIRECTORY = 'uploads/trick_pictures/';
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        parent::__construct($entityManager);
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

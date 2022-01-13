@@ -17,12 +17,8 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     #[Route('/logout', name: 'app_logout')]
     public function logout()
     {
-        throw new \Exception('Logout should never be reached');
     }
 }

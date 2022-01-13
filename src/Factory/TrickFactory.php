@@ -29,11 +29,6 @@ use Zenstruck\Foundry\Proxy;
  */
 final class TrickFactory extends ModelFactory
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     #[ArrayShape(['title' => "string", 'slug' => "string", 'state' => "string", 'description' => "string", 'createdAt' => "\DateTime", 'updatedAt' => "\DateTime"])]
     protected function getDefaults(): array
     {
@@ -48,7 +43,6 @@ final class TrickFactory extends ModelFactory
 
     protected function initialize(): self
     {
-        // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this
             // ->afterInstantiate(function(Trick $trick) {})
         ;
