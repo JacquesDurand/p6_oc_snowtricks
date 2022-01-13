@@ -74,6 +74,12 @@
         {% endfor %}
     </div>
     <br>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <a href="{{ path('trick_new') }}" class="text-decoration-none">
+            <button type="button" class="btn btn-outline-light bg-dark text-orange">Add a new trick !</button>
+        </a>
+    {% endif %}
+    <br>
 <div class="text-orange">
     {{ pagerfanta(pager) }}
 </div>

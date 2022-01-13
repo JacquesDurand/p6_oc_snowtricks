@@ -26,6 +26,7 @@ class FixturesLoadProdCommand extends Command
         $result = $result && $this->runCommand('app:fixtures:load_prod:users', $output);
         $result = $result && $this->runCommand('app:fixtures:load_prod:tricks', $output);
         $result = $result && $this->runCommand('app:fixtures:load_prod:pictures', $output);
+        $result = $result && $this->runCommand('app:fixtures:load_prod:videos', $output);
 
         return $result ? Command::SUCCESS : Command::FAILURE;
     }

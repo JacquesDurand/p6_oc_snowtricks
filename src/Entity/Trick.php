@@ -44,7 +44,6 @@ class Trick
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull]
     private ?User $author;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'tricks', cascade: ['persist'])]

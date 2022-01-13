@@ -80,7 +80,7 @@
                 <div class="row mb-2">
                     {% if trick.pictures is not empty %}
                         {% for picture in trick.pictures %}
-                            <div class="col-lg-4 ">
+                            <div class="d-flex flex-column col-lg-4">
                                 <img src="/{{ picture.path }}"
                                      class="object-fit d-block w-100 h-100 card-img-top border-orange p-3"
                                      alt="{{ picture.alt }}">
@@ -89,7 +89,7 @@
                                         <input form="{{ 'editPictureForm'~ picture.id }}" type="hidden" name="_token" value="{{ csrf_token('update'~trick.id~'picture'~picture.id) }}"/>
                                         <input class="inputFile" type="file" id="{{ 'editPictureInput'~ picture.id }}" name="PictureEdit" style="display:none;" />
                                         <button id="{{ 'editPictureButton'~picture.id }}" form="{{ 'editPictureForm'~ picture.id }}" type="submit"
-                                                class="text-orange btn btn-lg btn-outline-light mt-1 float-end click">
+                                                class="text-orange btn btn-lg btn-outline-light mt-1 click">
                                             Edit
                                             <span class="fa fa-pencil"></span>
                                         </button>
@@ -100,7 +100,7 @@
                                                value="{{ csrf_token('delete'~trick.id~'picture'~picture.id) }}"/>
                                         <input form="{{ 'removePictureForm'~ picture.id }}" type="hidden" name="_method" value="DELETE">
                                         <button form="{{ 'removePictureForm'~ picture.id }}" type="submit"
-                                                class="text-orange btn btn-lg btn-outline-light mt-1 float-end">
+                                                class="text-orange btn btn-lg btn-outline-light mt-1">
                                             Remove
                                             <span class="fa fa-trash"></span>
                                         </button>
@@ -111,13 +111,48 @@
                         {% endfor %}
                     {% endif %}
                 </div>
+            <hr class="text-white">
+            <div class="row mb-2">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <form method="post" enctype="multipart/form-data" action="{{ path('trick_add_picture', {'slug': trick.slug}) }}">
+                        <input id="trick_add_picture" type="file" class="form-control" name="add_simple_picture">
+                        <button type="submit" class="text-orange btn btn-outline-light mt-1">
+                            <span class="fa fa-plus-circle"></span>
+                            Add A Picture
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+            {% for video in trick.videos %}
+                <div class="row mb-2 mt-4">
+                    <div class="d-flex flex-column col-4">
+                        <iframe src="{{ video.link }}"></iframe>
+                    </div>
+                </div>
+            {% endfor %}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <hr class="text-white">
+                        <div class="row mb-2">
+                            <form method="post" action="{{ path('trick_add_video', {'slug': trick.slug}) }}">
+                                <label for="trick_add_video" class="text-orange">Add a video link</label>
+                                <input id="trick_add_video" type="text" class="form-control" name="add_simple_video">
+                                <button type="submit" class="text-orange btn btn-outline-light mt-1">
+                                    <span class="fa fa-plus-circle"></span>
+                                    Add A Video
+                                </button>
+                            </form>
+                        </div>
+                {% endif %}
+
                 <br>
                 <!-------------------- Meta datas -------------------------------------------------->
+            <section>
                 <div class="row mt-2">
                     <p class="fst-italic text-orange">By {{ trick.author.username }}</p>
                 </div>
                 <p class="fst-italic text-orange">Last updated: {{ trick.updatedAt|date }}</p>
                 <hr class="text-white">
+            </section>
                 <!-------------------- Categories -------------------------------------------------->
                 <h5 class="text-orange">Categories</h5>
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -152,11 +187,11 @@
                 {% endif %}
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <div class="mt-2">
-                    <button form="editForm" type="submit" class="text-orange btn btn-lg btn-outline-light float-end">Save</button>
+                    <button form="editForm" type="submit" class="text-orange btn btn-lg btn-outline-light">Save</button>
                 </div>
             {% endif %}
         </div>
-    </div>
+{#    </div>#}
     <!-------------------- Comments -------------------------------------------------->
     <div class="card mt-3 mb-2 card-rounded">
         <div class="card-body bg-dark">
