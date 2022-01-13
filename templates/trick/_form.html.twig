@@ -10,12 +10,18 @@
             {{ form_row(pictureForm.file) }}
         </div>
         <div class="img-preview"></div>
-{#        <div class="col-sm-3">#}
-{#            {{ pictureForm.vars.data.file }}#}
-{#            {% if pictureForm.vars.data.file|default %}#}
-{#                <img src="" alt="">#}
-{#            {% endif %}#}
-{#        </div>#}
+    </div>
+{% endmacro %}
+
+{% macro printVideoRow(videoForm) %}
+    <div class="col-xs-4 js-video-item">
+        <a href="#" class="js-remove-video pull-right text-orange">
+            <span class="fa fa-close"></span>
+        </a>
+        {{ form_errors(videoForm) }}
+        <div class="col-sm-9">
+            {{ form_row(videoForm.link) }}
+        </div>
     </div>
 {% endmacro %}
 
@@ -49,10 +55,19 @@
                 <span class="fa fa-plus-circle"></span>
                 Add A Picture
             </a>
-            <div class="col-12">
-                <button type="submit"
-                        class="text-orange btn btn-lg btn-outline-light float-end">{{ button_label|default('Save') }}</button>
-            </div>
+        </div>
+        <div class="row js-video-wrapper"
+             data-prototype-video="{{ formMacros.printVideoRow(trickForm.videos.vars.prototype)|e }}"
+             data-index-video="{{ trickForm.videos|length }}"
+        >
+            <a href="#" class="js-video-add text-decoration-none text-orange">
+                <span class="fa fa-plus-circle"></span>
+                Add A Video
+            </a>
+        </div>
+        <div class="col-12">
+            <button type="submit"
+                    class="text-orange btn btn-lg btn-outline-light float-end">{{ button_label|default('Save') }}</button>
         </div>
         {{ form_end(trickForm) }}
     </div>

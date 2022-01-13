@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Entity\Trick;
+use App\Entity\Video;
 use App\Form\CommentType;
 use App\Form\TrickCommentType;
 use App\Form\TrickType;
@@ -37,12 +38,17 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $pictures = $form->get('pictures')->getData();
+            $videos = $form->get('videos')->getData();
 
             /** @var Picture $picture */
             foreach ($pictures as $picture) {
                 $fileName = $fileUploader->upload($picture->getFile(), FileUploader::TRICK_PICTURE_DIRECTORY);
                 $picture->setPath($fileName);
                 $trick->addPicture($picture);
+            }
+            /** @var Video $video */
+            foreach ($videos as $video) {
+                $trick->addVideo($video);
             }
 
             $user = $security->getUser();
@@ -200,6 +206,50 @@ class TrickController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
         }
+        return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{slug}/pictures/add-simple', name: 'trick_add_picture', methods: ['POST'])]
+    #[IsGranted("IS_AUTHENTICATED_FULLY")]
+    public function addSimplePicture(Request $request, Trick $trick, FileUploader $fileUploader): Response
+    {
+        $file = $request->files->get('add_simple_picture');
+
+        if (null !== $file) {
+            $picture = new Picture();
+            $picture->setFile($file);
+            $fileName = $fileUploader->upload($picture->getFile(), FileUploader::TRICK_PICTURE_DIRECTORY);
+            $picture->setPath($fileName);
+            $trick->addPicture($picture);
+        } else {
+            $this->addFlash('error', 'Something went wrong uploading your file, please try again or contact an admin');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($trick);
+        $em->flush();
+
+        return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{slug}/video/add-simple', name: 'trick_add_video', methods: ['POST'])]
+    #[IsGranted("IS_AUTHENTICATED_FULLY")]
+    public function addSimpleVideo(Request $request, Trick $trick): Response
+    {
+        $link = $request->get('add_simple_video');
+
+        if (null !== $link && '' !== $link) {
+            $video = new Video();
+            $video->setLink($link);
+            $trick->addVideo($video);
+        } else {
+            $this->addFlash('error', 'Something went wrong with your link, please try again or contact an admin');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($trick);
+        $em->flush();
+
         return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
     }
 }
