@@ -9,7 +9,7 @@
 import './styles/app.css';
 import $ from 'jquery';
 import 'bootstrap';
-import './js/prototypes'
-import  './js/fileInputs'
+import './js/prototypes';
+import  './js/fileInputs';
 // start the Stimulus application
 import './bootstrap';

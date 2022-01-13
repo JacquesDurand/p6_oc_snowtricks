@@ -21,28 +21,25 @@ $(document).ready(function() {
         $wrapper.data('index-picture', index + 1);
         // Display the form in the page before the "new" link
         $(this).before(newForm);
-
-
-        let fileInput = $('#trick_pictures_'+index+'_file');
-
-        fileInput.on('change', function () {
-            getImgData();
-        })
-
+        
         function getImgData() {
             const files = fileInput[0].files[0];
             if (files) {
                 const fileReader = new FileReader();
                 fileReader.readAsDataURL(files);
                 fileReader.addEventListener("load", function () {
-                    let imgPreview = fileInput.parent().parent().next('.img-preview')
-                    console.log(imgPreview)
-                    imgPreview.css('display', 'block')
+                    let imgPreview = fileInput.parent().parent().next('.img-preview');
+                    imgPreview.css('display', 'block');
                     imgPreview.html('<img src="' + this.result + '"  alt=""/>');
                 });
             }
-
         }
+
+        let fileInput = $('#trick_pictures_'+index+'_file');
+
+        fileInput.on('change', function () {
+            getImgData();
+        })
     });
 });
 
