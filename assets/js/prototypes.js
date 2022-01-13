@@ -21,6 +21,8 @@ $(document).ready(function() {
         $wrapper.data('index-picture', index + 1);
         // Display the form in the page before the "new" link
         $(this).before(newForm);
+
+        let fileInput = $('#trick_pictures_'+index+'_file');
         
         function getImgData() {
             const files = fileInput[0].files[0];
@@ -34,8 +36,6 @@ $(document).ready(function() {
                 });
             }
         }
-
-        let fileInput = $('#trick_pictures_'+index+'_file');
 
         fileInput.on('change', function () {
             getImgData();
