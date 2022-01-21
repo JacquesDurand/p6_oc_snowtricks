@@ -53,7 +53,7 @@ class Trick
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, cascade: ['persist'], orphanRemoval: true)]
     private $comments;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist'], orphanRemoval: true)]
     #[Assert\NotBlank]
     private $pictures;
 
