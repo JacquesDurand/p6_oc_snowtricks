@@ -60,9 +60,12 @@
                                 {{ trick.title }}
                             </a>
                             {% if is_granted('IS_AUTHENTICATED_FULLY') and trick.state != constant('App\\Entity\\Trick::TRICK_STATE_IN_REVISION') %}
-                                <a href="{{ path('trick_show', {'slug': trick.slug}) }}" class="text-end">
-                                    <span class="fa fa-pencil text-orange"></span>
-                                </a>
+                                <div class="d-flex justify-content-around">
+                                    <a href="{{ path('trick_show', {'slug': trick.slug}) }}" class="text-end d-flex align-items-center text-decoration-none">
+                                        <span class="fa fa-pencil text-orange"></span>
+                                    </a>
+                                    {{ include('trick/_delete_form.html.twig') }}
+                                </div>
                             {% endif %}
                         </h5>
                         <p class="fst-italic text-orange">{{ trick.author.username }}</p>

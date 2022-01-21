@@ -6,7 +6,6 @@ use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
-use App\Form\CommentType;
 use App\Form\TrickCommentType;
 use App\Form\TrickType;
 use App\Repository\CategoryRepository;
@@ -14,11 +13,10 @@ use App\Repository\CommentRepository;
 use App\Repository\PictureRepository;
 use App\Repository\TrickRepository;
 use App\Service\File\FileUploader;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +26,20 @@ use Symfony\Component\Security\Core\Security;
 #[Route('/trick')]
 class TrickController extends AbstractController
 {
+    #[Route('/{id<\d+>}', name: 'trick_delete', methods: ['POST'])]
+    public function delete(Request $request, TrickRepository $trickRepository): Response
+    {
+        $trick = $trickRepository->find($request->get('id'));
+        if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($trick);
+            $entityManager->flush();
+        }
+
+        $this->addFlash('success', 'Trick deleted successfully');
+        return $this->redirectToRoute('app_index', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/new', name: 'trick_new', methods: ['GET','POST'])]
     #[IsGranted("IS_AUTHENTICATED_FULLY")]
     public function new(Request $request, Security $security, FileUploader $fileUploader): Response
@@ -58,9 +70,21 @@ class TrickController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($trick);
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
+            } catch (UniqueConstraintViolationException $exception) {
+                $this->addFlash('error', 'A Trick with this name already exists');
+                return $this->renderForm('trick/new.html.twig', [
+                    'trick' => $trick,
+                    'trickForm' => $form,
+                ]);
+            }
 
-            return $this->redirectToRoute('app_index', [], Response::HTTP_SEE_OTHER);
+
+            $this->addFlash('success', 'Your Trick '.$trick->getTitle().' has been created !');
+            return $this->redirectToRoute('trick_show', [
+                'slug' => $trick->getSlug()
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('trick/new.html.twig', [
@@ -155,18 +179,6 @@ class TrickController extends AbstractController
             'trick' => $trick,
             'form' => $form,
         ]);
-    }
-
-    #[Route('/{id}', name: 'trick_delete', methods: ['POST'])]
-    public function delete(Request $request, Trick $trick): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($trick);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('trick_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{slug}/pictures/{id}/delete', name: 'trick_delete_picture', methods: ['DELETE'])]
