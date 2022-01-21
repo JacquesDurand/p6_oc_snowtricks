@@ -16,12 +16,14 @@ $(document).ready(function() {
 $(document).ready(function () {
     $('.click').click(function (e) {
         e.preventDefault();
-       $('.click').prev('.inputFile').click();
+        let button = '#'+e.target.id
+       $(button).prev('.inputFile').click();
     });
 });
 
 $(document).ready(function() {
-    $('.inputFile').on('change', function () {
-        $('.inputFile').parent('.fileForm').submit();
+    $('.inputFile').on('change', function (e) {
+        let input = '#'+e.target.id
+        $(input).parent('.fileForm').submit();
     });
 });
