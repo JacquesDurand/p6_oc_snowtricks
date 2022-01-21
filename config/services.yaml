@@ -6,6 +6,7 @@
 parameters:
     trick_pictures_directory: '%kernel.project_dir%/public/uploads/trick_pictures'
     user_pictures_directory: '%kernel.project_dir%/public/uploads/user_pictures'
+    mail_to: '%env(MAIL_TO)%'
 
 services:
     # default configuration for services in *this* file
